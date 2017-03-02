@@ -134,6 +134,5 @@ public class MainActivity extends AppCompatActivity {
         Uri uri = Uri.parse(fileUrl);
         DownloadManager.Request request = new DownloadManager.Request(uri);
         downloadManager.enqueue(request);
-        Log.i("TEST", "Downloding...");
     }
 }
