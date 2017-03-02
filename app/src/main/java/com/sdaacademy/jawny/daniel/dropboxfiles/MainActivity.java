@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.upload_chosen_file:
                 uploadChosenFile();
-
                 break;
             case R.id.download:
                 downloadFile("https://developer.android.com/images/home/nougat_bg_2x.jpg");
@@ -115,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i("TEST", "onResponse " + response.body().string());
+                Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i("TEST", "onResponse " + response.body().string());
+                Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
             }
         });
     }
