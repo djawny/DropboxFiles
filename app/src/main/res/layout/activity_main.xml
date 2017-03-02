@@ -16,6 +16,7 @@
         android:id="@+id/upload"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:padding="8dp"
         android:text="Upload" />
 
@@ -23,6 +24,7 @@
         android:id="@+id/upload_chosen_file"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:padding="8dp"
         android:text="Upload chosen" />
 
@@ -30,6 +32,7 @@
         android:id="@+id/download"
         android:layout_width="140dp"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:padding="8dp"
         android:text="Download" />
 

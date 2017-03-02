@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,15 +45,18 @@ public class MainActivity extends AppCompatActivity {
             case R.id.upload:
                 try {
                     uploadFile();
+                    Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
             case R.id.upload_chosen_file:
                 uploadChosenFile();
+
                 break;
             case R.id.download:
                 downloadFile("https://developer.android.com/images/home/nougat_bg_2x.jpg");
+                Toast.makeText(this, "Downloading...", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -69,12 +73,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Uri uri = data.getData();
-        if (uri != null) {
-            try {
-                uploadFile(uri);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        try {
+            uploadFile(uri);
+            Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
