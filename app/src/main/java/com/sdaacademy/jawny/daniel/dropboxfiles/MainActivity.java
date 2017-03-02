@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        checkPermissions();
+        checkPermissionsToRead();
+        checkPermissionsToWrite();
     }
 
     @OnClick({R.id.upload, R.id.upload_chosen_file, R.id.download})
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 uploadChosenFile();
                 break;
             case R.id.download:
-                downloadFile("https://developer.android.com/images/home/nougat_bg_2x.jpg");
+                downloadFile("http://download.thinkbroadband.com/10MB.zip", "Plik 10MB");
                 Toast.makeText(this, "Downloading...", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -80,12 +82,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean checkPermissions() {
+    private boolean checkPermissionsToRead() {
         int status = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
         if (status == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
             String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+            ActivityCompat.requestPermissions(this, permissions, 0);
+            return false;
+        }
+    }
+
+    private boolean checkPermissionsToWrite() {
+        int status = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (status == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
             ActivityCompat.requestPermissions(this, permissions, 0);
             return false;
         }
@@ -143,10 +156,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void downloadFile(String fileUrl) {
+    private void downloadFile(String fileUrl, String title) {
         DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         Uri uri = Uri.parse(fileUrl);
         DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "10MB.zip");
+        request.setTitle(title);
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         downloadManager.enqueue(request);
     }
 }
