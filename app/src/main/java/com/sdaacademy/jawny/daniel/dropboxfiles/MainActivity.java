@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i("TEST", "onResponse " + response.body().string());
-                Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Upload Successful", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i("TEST", "onResponse " + response.body().string());
-                Toast.makeText(getApplicationContext(), "Upload Successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Upload Successful", Toast.LENGTH_SHORT).show();
             }
         });
     }
