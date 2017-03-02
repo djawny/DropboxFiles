@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +18,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -31,18 +34,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         checkPermissions();
+    }
 
-//        try {
-//            uploadFile();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-
-//        uploadChosenFile();
-
-        downloadFile("https://developer.android.com/images/home/nougat_bg_2x.jpg");
+    @OnClick({R.id.upload, R.id.upload_chosen_file, R.id.download})
+    public void getButtonClicked(View view) {
+        switch (view.getId()) {
+            case R.id.upload:
+                try {
+                    uploadFile();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.upload_chosen_file:
+                uploadChosenFile();
+                break;
+            case R.id.download:
+                downloadFile("https://developer.android.com/images/home/nougat_bg_2x.jpg");
+                break;
+        }
     }
 
     private void uploadChosenFile() {
