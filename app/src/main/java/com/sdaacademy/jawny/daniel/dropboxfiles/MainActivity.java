@@ -5,10 +5,10 @@ import android.app.DownloadManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
-import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -32,8 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+
         checkPermissions();
+
 //        try {
 //            uploadFile();
 //        } catch (JSONException e) {
@@ -57,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Uri uri = data.getData();
-        try {
-            uploadFile(uri);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (uri != null) {
+            try {
+                uploadFile(uri);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -132,6 +134,6 @@ public class MainActivity extends AppCompatActivity {
         Uri uri = Uri.parse(fileUrl);
         DownloadManager.Request request = new DownloadManager.Request(uri);
         downloadManager.enqueue(request);
-        Log.i("TEST","Downloding...");
+        Log.i("TEST", "Downloding...");
     }
 }
