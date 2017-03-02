@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -28,7 +31,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         checkPermissions();
-        uploadFile();
+        try {
+            uploadFile();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean checkPermissions() {
@@ -42,13 +49,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void uploadFile() {
+    private void uploadFile() throws JSONException {
         File file = new File("/storage/emulated/0/Download/piwo.jpg");
+        String jsonPath = new JSONObject().put("path", "/piwo.jpg").toString();
         MediaType mediaType = MediaType.parse("application/octet-stream");
         RequestBody body = RequestBody.create(mediaType, file);
         Request request = new Request.Builder()
                 .addHeader("Authorization", "Bearer 3TS3KjVdr6AAAAAAAAAAFrf169ZowTZOabL7ZtZcq5P0Q7PjQf8hF6ar0thW2_gx")
                 .addHeader("Content-Type", "application/octet-stream")
+                .addHeader("Dropbox-API-Arg", jsonPath)
                 .url("https://content.dropboxapi.com/2/files/upload")
                 .post(body)
                 .build();
