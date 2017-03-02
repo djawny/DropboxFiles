@@ -1,7 +1,10 @@
 package com.sdaacademy.jawny.daniel.dropboxfiles;
 
 import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,8 +34,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         checkPermissions();
+//        try {
+//            uploadFile();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+
+//        uploadChosenFile();
+
+        downloadFile("https://developer.android.com/images/home/nougat_bg_2x.jpg");
+    }
+
+    private void uploadChosenFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        startActivityForResult(intent, 0);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri uri = data.getData();
         try {
-            uploadFile();
+            uploadFile(uri);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -74,5 +100,38 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("TEST", "onResponse " + response.body().string());
             }
         });
+    }
+
+    private void uploadFile(Uri uri) throws JSONException {
+        Log.i("TEST", uri.getPath());
+        String jsonPath = new JSONObject().put("path", "/p.jpg").toString();
+        Request request = new Request.Builder()
+                .addHeader("Authorization", "Bearer 3TS3KjVdr6AAAAAAAAAAFrf169ZowTZOabL7ZtZcq5P0Q7PjQf8hF6ar0thW2_gx")
+                .addHeader("Content-Type", "application/octet-stream")
+                .addHeader("Dropbox-API-Arg", jsonPath)
+                .url("https://content.dropboxapi.com/2/files/upload")
+                .post(new StreamRequestBody(getApplicationContext(), uri))
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        Call call = client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i("TEST", "fail", e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.i("TEST", "onResponse " + response.body().string());
+            }
+        });
+    }
+
+    private void downloadFile(String fileUrl) {
+        DownloadManager downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        Uri uri = Uri.parse(fileUrl);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+        downloadManager.enqueue(request);
+        Log.i("TEST","Downloding...");
     }
 }
